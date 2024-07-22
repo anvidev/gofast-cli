@@ -1,4 +1,4 @@
-module github.com/anvidev/typer
+module github.com/anvidev/gofast
 
 go 1.22.4
 

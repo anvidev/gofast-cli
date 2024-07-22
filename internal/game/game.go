@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"os"
 
-	"github.com/anvidev/typer/internal/model"
+	"github.com/anvidev/gofast/internal/model"
 	tea "github.com/charmbracelet/bubbletea"
 )
 

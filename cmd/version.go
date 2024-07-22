@@ -12,11 +12,11 @@ func init() {
 
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Print the version of Typer",
-	Long:  "Prints the current version installed of Typer CLI game",
+	Short: "Print the version of Gofast",
+	Long:  "Prints the current version installed of Gofast CLI game",
 	Run:   versionRun,
 }
 
 func versionRun(cmd *cobra.Command, args []string) {
-	fmt.Println("typer version 0.0.1")
+	fmt.Println("gofast version 0.0.1")
 }
