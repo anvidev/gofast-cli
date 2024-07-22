@@ -11,4 +11,8 @@ toy project for learning cli development with golang.
 
 ```bash
 echo "hello world" | go run main.go play
+
+# or without piping
+
+go run main.go play
 ```
