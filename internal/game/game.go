@@ -33,8 +33,7 @@ func StartFromStdin() error {
 }
 
 func StartFromRandom() error {
-	// TODO: implement some sort of random words logic
-	text := "hello from the other side"
+	text := generateWordString(20)
 
 	text, err := formatWhitespace(text)
 	if err != nil {

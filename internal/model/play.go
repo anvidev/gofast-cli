@@ -18,8 +18,7 @@ var (
 	untypedStyle        = lipgloss.NewStyle().Faint(true).Foreground(lipgloss.Color("#D9D9D9"))
 	cursorStyle         = untypedStyle.Underline(true)
 	typedCorrectStyle   = lipgloss.NewStyle().UnsetFaint()
-	typedIncorrectStyle = lipgloss.NewStyle().Background(lipgloss.Color("#FD0000")).Bold(true)
-	wpmStyle            = lipgloss.NewStyle().Foreground(lipgloss.Color("#916F10"))
+	typedIncorrectStyle = lipgloss.NewStyle().Background(lipgloss.Color("#FF6961")).Bold(true)
 )
 
 type PlayModel struct {
@@ -105,8 +104,10 @@ func (m PlayModel) View() string {
 	}
 
 	s := fmt.Sprintf(
-		"%.2f wpm\n\n%s",
+		"%.2f wpm - %.2f score - %d mistakes\n\n%s",
 		wpm,
+		m.Score,
+		m.Mistakes,
 		typed,
 	)
 
@@ -115,7 +116,8 @@ func (m PlayModel) View() string {
 		s += untypedStyle.Render(string(remaining[1:]))
 	}
 
-	game := centerStyle.Height(m.height).Width(m.width).Render(s)
+	textBox := lipgloss.NewStyle().MaxWidth(width)
+	game := centerStyle.Height(m.height).Width(m.width).Render(textBox.Render(s))
 
 	return game
 }
