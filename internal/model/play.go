@@ -104,10 +104,8 @@ func (m PlayModel) View() string {
 	}
 
 	s := fmt.Sprintf(
-		"%.2f wpm - %.2f score - %d mistakes\n\n%s",
+		"%.0f wpm\n\n%s",
 		wpm,
-		m.Score,
-		m.Mistakes,
 		typed,
 	)
 
