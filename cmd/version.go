@@ -18,5 +18,5 @@ var versionCmd = &cobra.Command{
 }
 
 func versionRun(cmd *cobra.Command, args []string) {
-	fmt.Println("gofast version 0.0.1")
+	fmt.Println("gofast version 0.0.2")
 }
