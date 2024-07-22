@@ -11,9 +11,9 @@ toy project for learning cli development with golang.
 ## usage
 
 ```bash
+# pipe in your own text
 echo "hello world" | go run main.go play
 
 # or play with random generated words
-
 go run main.go play
 ```
