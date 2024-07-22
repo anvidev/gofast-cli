@@ -10,5 +10,5 @@ toy project for learning cli development with golang.
 ## usage
 
 ```bash
-echo "hello world" | go run main.go
+echo "hello world" | go run main.go play
 ```
