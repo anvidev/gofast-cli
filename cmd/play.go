@@ -30,5 +30,12 @@ func playRun(cmd *cobra.Command, args []string) {
 	case (stat.Mode() & os.ModeCharDevice) == 0:
 		err = game.StartFromStdin()
 		break
+	default:
+		err = game.StartFromRandom()
+	}
+
+	if err != nil {
+		fmt.Println("error starting game:", err)
+		os.Exit(1)
 	}
 }

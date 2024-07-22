@@ -32,6 +32,18 @@ func StartFromStdin() error {
 	return start(text)
 }
 
+func StartFromRandom() error {
+	// TODO: implement some sort of random words logic
+	text := "hello from the other side"
+
+	text, err := formatWhitespace(text)
+	if err != nil {
+		return err
+	}
+
+	return start(text)
+}
+
 func start(text string) error {
 	game := &model.PlayModel{
 		Text: []rune(wrapString(text, defaultWidth)),
