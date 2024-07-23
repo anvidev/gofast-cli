@@ -32,8 +32,8 @@ func StartFromStdin() error {
 	return start(text)
 }
 
-func StartFromRandom() error {
-	text := generateWordString(20)
+func StartFromRandom(lang string) error {
+	text := generateWordString(20, lang)
 
 	text, err := formatWhitespace(text)
 	if err != nil {

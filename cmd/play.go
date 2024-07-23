@@ -15,11 +15,32 @@ func init() {
 var playCmd = &cobra.Command{
 	Use:   "play",
 	Short: "start a Gofast game",
-	Long:  "start a Gofast game to practice your touchtyping and improve your wpm",
-	Run:   playRun,
+	Long: `start a Gofast game to practice your touchtyping and improve your wpm
+          
+          use the language flag to change the language. supported languages are:
+            - english
+            - danish
+            - dutch
+            - croatian
+            - french
+            - georgian
+            - german
+            - italian
+            - norwegian
+            - polish
+            - portuguese
+            - spanish
+            - swedish`,
+	Run: playRun,
 }
 
 func playRun(cmd *cobra.Command, args []string) {
+	lang, err := cmd.Flags().GetString("language")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
 	stat, err := os.Stdin.Stat()
 	if err != nil {
 		fmt.Println(err)
@@ -31,7 +52,7 @@ func playRun(cmd *cobra.Command, args []string) {
 		err = game.StartFromStdin()
 		break
 	default:
-		err = game.StartFromRandom()
+		err = game.StartFromRandom(lang)
 	}
 
 	if err != nil {

@@ -16,12 +16,23 @@ const (
 )
 
 var supportedLangs = map[string]bool{
-	"english": true,
-	"danish":  true,
+	"english":    true,
+	"danish":     true,
+	"dutch":      true,
+	"croatian":   true,
+	"french":     true,
+	"georgian":   true,
+	"german":     true,
+	"italian":    true,
+	"norwegian":  true,
+	"polish":     true,
+	"portuguese": true,
+	"spanish":    true,
+	"swedish":    true,
 }
 
-func generateWordString(n int) string {
-	wordStr, err := getWords("english")
+func generateWordString(n int, lang string) string {
+	wordStr, err := getWords(lang)
 	if err != nil {
 		fmt.Println("could not get words", err)
 		os.Exit(1)

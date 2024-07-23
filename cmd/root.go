@@ -37,5 +37,7 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	var lang string
+	playCmd.PersistentFlags().StringVarP(&lang, "language", "l", "english", "specify language for generated words")
+	// playCmd.Flags().StringVarP(&lang, "language", "l", "english", "specify language for generated words")
 }
