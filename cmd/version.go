@@ -14,9 +14,9 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Print the version of Gofast",
 	Long:  "Prints the current version installed of Gofast CLI game",
-	Run:   versionRun,
+	Run:   runVersion,
 }
 
-func versionRun(cmd *cobra.Command, args []string) {
+func runVersion(cmd *cobra.Command, args []string) {
 	fmt.Println("gofast version 0.0.2")
 }

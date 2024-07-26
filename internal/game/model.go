@@ -1,4 +1,4 @@
-package model
+package game
 
 import (
 	"fmt"
@@ -9,36 +9,48 @@ import (
 )
 
 const (
-	width        = 60
+	StringWidth  = 60
 	charsPerWord = 5
 )
 
 var (
-	centerStyle         = lipgloss.NewStyle().Align(lipgloss.Center, lipgloss.Center)
-	untypedStyle        = lipgloss.NewStyle().Faint(true).Foreground(lipgloss.Color("#D9D9D9"))
-	cursorStyle         = untypedStyle.Underline(true)
-	typedCorrectStyle   = lipgloss.NewStyle().UnsetFaint()
-	typedIncorrectStyle = lipgloss.NewStyle().Background(lipgloss.Color("#FF6961")).Bold(true)
+	center    = lipgloss.NewStyle().Align(lipgloss.Center, lipgloss.Center)
+	untyped   = lipgloss.NewStyle().Faint(true).Foreground(lipgloss.Color("#D9D9D9"))
+	cursor    = untyped.Underline(true)
+	correct   = lipgloss.NewStyle().UnsetFaint()
+	incorrect = lipgloss.NewStyle().Background(lipgloss.Color("#FF6961")).Bold(true)
 )
 
+type TickMsg time.Time
+
+func doTick() tea.Cmd {
+	return tea.Tick(time.Second, func(t time.Time) tea.Msg {
+		return TickMsg(t)
+	})
+}
+
 type PlayModel struct {
-	Text     []rune
-	Typed    []rune
-	Start    time.Time
-	Mistakes int
-	Score    float64
-	width    int
-	height   int
+	Text      []rune
+	Typed     []rune
+	start     time.Time
+	Mistakes  int
+	Score     float64
+	width     int
+	height    int
+	countdown int
 }
 
 func (m PlayModel) Init() tea.Cmd {
-	return nil
+	return doTick()
 }
 
 func (m PlayModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		if msg.String() == "ctrl+c" || msg.String() == "esc" {
+		switch msg.Type {
+		case tea.KeyCtrlC:
+			return m, tea.Quit
+		case tea.KeyEscape:
 			return m, tea.Quit
 		}
 
@@ -46,8 +58,8 @@ func (m PlayModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		}
 
-		if m.Start.IsZero() {
-			m.Start = time.Now()
+		if m.start.IsZero() {
+			m.start = time.Now()
 		}
 
 		if msg.String() == "backspace" && len(m.Typed) > 0 {
@@ -74,6 +86,9 @@ func (m PlayModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.Mistakes++
 		}
 
+	case TickMsg:
+		m.countdown++
+		return m, doTick()
 	case tea.WindowSizeMsg:
 		if msg.Width == 0 && msg.Height == 0 {
 			return m, nil
@@ -92,30 +107,31 @@ func (m PlayModel) View() string {
 	var typed string
 	for i, c := range m.Typed {
 		if c == rune(m.Text[i]) {
-			typed += typedCorrectStyle.Render(string(c))
+			typed += correct.Render(string(c))
 		} else {
-			typed += typedIncorrectStyle.Render(string(m.Text[i]))
+			typed += incorrect.Render(string(m.Text[i]))
 		}
 	}
 
 	var wpm float64
 	if len(m.Typed) > 0 {
-		wpm = (m.Score / charsPerWord) / (time.Since(m.Start).Minutes())
+		wpm = (m.Score / charsPerWord) / (time.Since(m.start).Minutes())
 	}
 
 	s := fmt.Sprintf(
-		"%.0f wpm\n\n%s",
+		"%.0f wpm  %s seconds left\n\n%s",
 		wpm,
+		fmt.Sprint(m.countdown),
 		typed,
 	)
 
 	if len(remaining) > 0 {
-		s += cursorStyle.Render(string(remaining[:1]))
-		s += untypedStyle.Render(string(remaining[1:]))
+		s += cursor.Render(string(remaining[:1]))
+		s += untyped.Render(string(remaining[1:]))
 	}
 
-	textBox := lipgloss.NewStyle().MaxWidth(width)
-	game := centerStyle.Height(m.height).Width(m.width).Render(textBox.Render(s))
+	textBox := lipgloss.NewStyle().MaxWidth(StringWidth)
+	game := center.Height(m.height).Width(m.width).Render(textBox.Render(s))
 
 	return game
 }

@@ -2,17 +2,13 @@ package game
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 
-	"github.com/anvidev/gofast/internal/model"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-const (
-	defaultWidth = 60
-)
-
-func StartFromStdin() error {
+func StartStdin() error {
 	var stdin []byte
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
@@ -32,20 +28,21 @@ func StartFromStdin() error {
 	return start(text)
 }
 
-func StartFromRandom(lang string) error {
+func StartRandom(lang string) error {
 	text := generateWordString(20, lang)
 
 	text, err := formatWhitespace(text)
 	if err != nil {
 		return err
 	}
+	fmt.Println(text)
 
 	return start(text)
 }
 
 func start(text string) error {
-	game := &model.PlayModel{
-		Text: []rune(wrapString(text, defaultWidth)),
+	game := &PlayModel{
+		Text: []rune(wrapString(text, StringWidth)),
 	}
 
 	program := tea.NewProgram(game)
